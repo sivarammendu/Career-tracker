@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerPath | Journey Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f9c74f;
+            --danger: #f94144;
+            --gray: #6c757d;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin: 20px 0;
+            transition: var(--transition);
+            transform: translateY(0);
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.3);
+        }
+
+        .btn-accent:hover {
+            background-color: #d81159;
+            box-shadow: 0 6px 16px rgba(247, 37, 133, 0.4);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+
+        /* Page Styles */
+        .page {
+            display: none;
+            max-width: 600px;
+            margin: 40px auto;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 24px;
+            background-color: #e9ecef;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 50px;
+            transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            box-shadow: 0 0 20px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Calendar Styles */
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .calendar-day {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .day-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .task-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .task-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .task-completed {
+            background-color: #d1fae5;
+            text-decoration: line-through;
+            opacity: 0.8;
+        }
+
+        .task-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: var(--primary);
+            margin-top: 8px;
+            text-decoration: none;
+        }
+
+        .task-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .calendar {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+
+        /* Year Selection */
+        .year-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .year-option {
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            padding: 20px 15px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .year-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .year-option.selected {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+        }
+
+        .year-option i {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .year-option.selected i {
+            color: white;
+        }
+
+        /* Career Options */
+        .career-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .career-option {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .career-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .career-option i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .career-option h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notification i {
+            font-size: 24px;
+            color: var(--success);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-road"></i>
+                <span>CareerPath</span>
+            </div>
+            <div id="auth-buttons">
+                <button class="btn btn-secondary" id="sign-in-btn">
+                    <i class="fas fa-sign-in-alt"></i>Sign In
+                </button>
+                <button class="btn" id="sign-up-btn">
+                    <i class="fas fa-user-plus"></i>Sign Up
+                </button>
+            </div>
+            <div id="user-menu" style="display: none;">
+                <span id="user-name"></span>
+                <button class="btn btn-secondary" id="sign-out-btn">
+                    <i class="fas fa-sign-out-alt"></i>Sign Out
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Authentication Pages -->
+        <div id="sign-up-page" class="page">
+            <div class="card">
+                <h2>Create Your Account</h2>
+                <p>Start your career journey with us</p>
+                <form id="sign-up-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="Create a password" required>
+                    </div>
+                    <button type="submit" class="btn">
+                        <i class="fas fa-rocket"></i>Get Started
+                    </button>
+                </form>
+                <p style="margin-top: 20px; text-align: center;">
+                    Already have an account? <a href="#" id="go-to-signin" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign In</a>
+                </p>
+            </div>
+        </div>
+
+        <div id="sign-in-page" class="page">
+            <div class="card">
+                <h2>Welcome Back</h2>
+                <p>Continue your career journey</p>
+                <form id="sign-in-form">
+                    <div class="form-group">
+                        <label for="signin-email">Email Address</label>
+                        <input type="email" id="signin-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password">Password</label>
+                        <input type="password" id="signin-password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn">
+                        <i class="fas fa-sign-in-alt"></i>Sign In
+                    </button>
+                </form>
+                <p style="margin-top: 20px; text-align: center;">
+                    Don't have an account? <a href="#" id="go-to-signup" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sign Up</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Education Background Page -->
+        <div id="education-page" class="page">
+            <div class="card">
+                <h2>Tell Us About Your Education</h2>
+                <p>This helps us personalize your career roadmap</p>
+                <div class="form-group">
+                    <label for="education-field">What are you currently studying?</label>
+                    <select id="education-field">
+                        <option value="">Select your field</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Medicine">Medicine</option>
+                        <option value="Arts">Arts</option>
+                        <option value="Science">Science</option>
+                        <option value="Business">Business</option>
+                        <option value="Law">Law</option>
+                        <option value="Education">Education</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Which year are you currently in?</label>
+                    <div class="year-selection">
+                        <div class="year-option" data-year="1">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>1st Year</h3>
+                            <p>Just starting</p>
+                        </div>
+                        <div class="year-option" data-year="2">
+                            <i class="fas fa-calendar-check"></i>
+                            <h3>2nd Year</h3>
+                            <p>Getting there</p>
+                        </div>
+                        <div class="year-option" data-year="3">
+                            <i class="fas fa-calendar-day"></i>
+                            <h3>3rd Year</h3>
+                            <p>Almost done</p>
+                        </div>
+                        <div class="year-option" data-year="4">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>Final Year</h3>
+                            <p>Graduating soon</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" id="education-submit">
+                    <i class="fas fa-arrow-right"></i>Continue
+                </button>
+            </div>
+        </div>
+
+        <!-- Career Goals Page -->
+        <div id="career-goals-page" class="page">
+            <div class="card">
+                <h2>Choose Your Career Path</h2>
+                <p>Based on your education background</p>
+                <div class="career-options" id="career-options">
+                    <!-- Career options will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page">
+            <div class="dashboard-header">
+                <div>
+                    <h2>Your Career Journey</h2>
+                    <p id="current-career-goal">Select a career goal to get started</p>
+                </div>
+                <div>
+                    <p id="remaining-time">Roadmap duration: 0 days</p>
+                </div>
+            </div>
+
+            <div class="progress-container card">
+                <div class="progress-info">
+                    <h3>Your Progress</h3>
+                    <span id="progress-percentage">0% completed</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="calendar-nav">
+                    <h3>Your Roadmap</h3>
+                    <div>
+                        <span>Show completed tasks: </span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="show-completed" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="calendar" id="calendar-view">
+                    <!-- Calendar days will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div>
+            <h4>Success!</h4>
+            <p id="notification-message">Your action was completed successfully</p>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced roadmap data with categories and difficulty levels
+        const careerRoadmaps = {
+            "Software Developer": {
+                duration: 120, // days
+                tasks: [
+                    { day: 1, task: "Learn basic programming concepts", link: "https://www.freecodecamp.org/learn/", category: "Foundation", difficulty: "Beginner" },
+                    { day: 2, task: "Set up development environment", link: "https://code.visualstudio.com/docs/setup/setup-overview", category: "Setup", difficulty: "Beginner" },
+                    { day: 5, task: "Complete HTML fundamentals", link: "https://developer.mozilla.org/en-US/docs/Web/HTML", category: "Frontend", difficulty: "Beginner" },
+                    { day: 10, task: "Complete CSS fundamentals", link: "https://developer.mozilla.org/en-US/docs/Web/CSS", category: "Frontend", difficulty: "Beginner" },
+                    { day: 15, task: "Build a simple static webpage", link: "https://www.w3schools.com/html/html_examples.asp", category: "Project", difficulty: "Intermediate" },
+                    { day: 20, task: "Learn JavaScript basics", link: "https://javascript.info/first-steps", category: "Frontend", difficulty: "Beginner" },
+                    { day: 25, task: "Practice DOM manipulation", link: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents", category: "Frontend", difficulty: "Intermediate" },
+                    { day: 30, task: "Build an interactive webpage", link: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps", category: "Project", difficulty: "Intermediate" },
+                    { day: 35, task: "Learn version control with Git", link: "https://guides.github.com/introduction/git-handbook/", category: "Tools", difficulty: "Intermediate" },
+                    { day: 40, task: "Create a GitHub account and repository", link: "https://github.com/", category: "Tools", difficulty: "Beginner" },
+                    { day: 45, task: "Learn responsive design principles", link: "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design", category: "Frontend", difficulty: "Intermediate" },
+                    { day: 50, task: "Build a responsive website", link: "https://www.w3schools.com/css/css_rwd_intro.asp", category: "Project", difficulty: "Intermediate" },
+                    { day: 55, task: "Learn CSS frameworks (Bootstrap)", link: "https://getbootstrap.com/docs/5.0/getting-started/introduction/", category: "Frontend", difficulty: "Intermediate" },
+                    { day: 60, task: "Build a project using Bootstrap", link: "https://getbootstrap.com/docs/5.0/examples/", category: "Project", difficulty: "Intermediate" },
+                    { day: 65, task: "Learn JavaScript ES6 features", link: "https://www.w3schools.com/js/js_es6.asp", category: "Frontend", difficulty: "Intermediate" },
+                    { day: 70, task: "Practice with JavaScript arrays and objects", link: "https://javascript.info/array-methods", category: "Frontend", difficulty: "Intermediate" },
+                    { day: 75, task: "Learn asynchronous JavaScript", link: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous", category: "Frontend", difficulty: "Advanced" },
+                    { day: 80, task: "Build a project using async/await", link: "https://javascript.info/async-await", category: "Project", difficulty: "Advanced" },
+                    { day: 85, task: "Learn about APIs and fetch", link: "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch", category: "Backend", difficulty: "Intermediate" },
+                    { day: 90, task: "Build a weather app using a public API", link: "https://openweathermap.org/api", category: "Project", difficulty: "Advanced" },
+                    { day: 95, task: "Learn React basics", link: "https://reactjs.org/tutorial/tutorial.html", category: "Frontend", difficulty: "Intermediate" },
+                    { day: 100, task: "Build a simple React app", link: "https://reactjs.org/docs/create-a-new-react-app.html", category: "Project", difficulty: "Intermediate" },
+                    { day: 105, task: "Learn about component state and props", link: "https://reactjs.org/docs/state-and-lifecycle.html", category: "Frontend", difficulty: "Intermediate" },
+                    { day: 110, task: "Build a more complex React application", link: "https://reactjs.org/docs/thinking-in-react.html", category: "Project", difficulty: "Advanced" },
+                    { day: 115, task: "Deploy your application", link: "https://create-react-app.dev/docs/deployment/", category: "DevOps", difficulty: "Intermediate" },
+                    { day: 120, task: "Create portfolio and update LinkedIn", link: "https://www.linkedin.com/", category: "Career", difficulty: "Beginner" }
+                ]
+            },
+            "Data Scientist": {
+                duration: 120,
+                tasks: [
+                    { day: 1, task: "Learn Python programming basics", link: "https://www.learnpython.org/", category: "Foundation", difficulty: "Beginner" },
+                    { day: 10, task: "Study statistics fundamentals", link: "https://www.khanacademy.org/math/statistics-probability", category: "Foundation", difficulty: "Intermediate" },
+                    { day: 20, task: "Learn data manipulation with Pandas", link: "https://pandas.pydata.org/docs/", category: "Data Manipulation", difficulty: "Intermediate" },
+                    { day: 30, task: "Study data visualization with Matplotlib", link: "https://matplotlib.org/", category: "Visualization", difficulty: "Intermediate" },
+                    { day: 40, task: "Learn machine learning basics", link: "https://www.coursera.org/learn/machine-learning", category: "ML", difficulty: "Advanced" },
+                    { day: 50, task: "Complete a data analysis project", link: "https://www.kaggle.com/", category: "Project", difficulty: "Intermediate" },
+                    { day: 60, task: "Study SQL for data querying", link: "https://www.w3schools.com/sql/", category: "Data Manipulation", difficulty: "Intermediate" },
+                    { day: 70, task: "Learn about neural networks", link: "https://www.tensorflow.org/learn", category: "ML", difficulty: "Advanced" },
+                    { day: 80, task: "Build a predictive model", link: "https://scikit-learn.org/", category: "Project", difficulty: "Advanced" },
+                    { day: 90, task: "Study big data technologies", link: "https://hadoop.apache.org/", category: "Big Data", difficulty: "Advanced" },
+                    { day: 100, task: "Learn data storytelling techniques", link: "https://www.tableau.com/learn/articles/data-visualization", category: "Visualization", difficulty: "Intermediate" },
+                    { day: 110, task: "Complete a capstone project", link: "https://www.kaggle.com/competitions", category: "Project", difficulty: "Advanced" },
+                    { day: 120, task: "Prepare data science portfolio", link: "https://towardsdatascience.com/", category: "Career", difficulty: "Intermediate" }
+                ]
+            },
+            "UX Designer": {
+                duration: 90,
+                tasks: [
+                    { day: 1, task: "Learn design principles", link: "https://www.interaction-design.org/literature/topics/design-principles", category: "Foundation", difficulty: "Beginner" },
+                    { day: 10, task: "Study color theory", link: "https://www.colormatters.com/color-and-design/basic-color-theory", category: "Design", difficulty: "Beginner" },
+                    { day: 20, task: "Learn typography fundamentals", link: "https://practicaltypography.com/", category: "Design", difficulty: "Intermediate" },
+                    { day: 30, task: "Master design tools (Figma/Sketch)", link: "https://www.figma.com/resources/learn-design/", category: "Tools", difficulty: "Intermediate" },
+                    { day: 40, task: "Study user research methods", link: "https://www.nngroup.com/articles/user-research/", category: "Research", difficulty: "Intermediate" },
+                    { day: 50, task: "Create wireframes and prototypes", link: "https://www.interaction-design.org/literature/topics/wireframing", category: "Design", difficulty: "Intermediate" },
+                    { day: 60, task: "Learn usability testing", link: "https://www.usability.gov/how-to-and-tools/methods/usability-testing.html", category: "Research", difficulty: "Intermediate" },
+                    { day: 70, task: "Build a design portfolio", link: "https://www.behance.net/", category: "Career", difficulty: "Intermediate" },
+                    { day: 80, task: "Study interaction design", link: "https://www.interaction-design.org/literature/topics/interaction-design", category: "Design", difficulty: "Advanced" },
+                    { day: 90, task: "Complete a real-world project", link: "https://www.dribbble.com/", category: "Project", difficulty: "Advanced" }
+                ]
+            }
+        };
+
+        // Career options based on education background
+        const careerOptions = {
+            "Engineering": ["Software Developer", "Data Scientist", "DevOps Engineer", "ML Engineer", "Cloud Architect"],
+            "Medicine": ["Doctor", "Surgeon", "Medical Researcher", "Pharmacist", "Dentist"],
+            "Arts": ["UX Designer", "Graphic Designer", "Writer", "Musician", "Art Director"],
+            "Science": ["Research Scientist", "Biologist", "Chemist", "Physicist", "Data Scientist"],
+            "Business": ["Business Analyst", "Marketing Manager", "Financial Analyst", "Entrepreneur", "HR Manager"],
+            "Law": ["Lawyer", "Paralegal", "Legal Consultant", "Judge", "Compliance Officer"],
+            "Education": ["Teacher", "Professor", "Education Consultant", "Curriculum Developer", "School Administrator"]
+        };
+
+        // DOM Elements
+        const pages = {
+            signUp: document.getElementById('sign-up-page'),
+            signIn: document.getElementById('sign-in-page'),
+            education: document.getElementById('education-page'),
+            careerGoals: document.getElementById('career-goals-page'),
+            dashboard: document.getElementById('dashboard-page')
+        };
+
+        const authButtons = document.getElementById('auth-buttons');
+        const userMenu = document.getElementById('user-menu');
+        const userName = document.getElementById('user-name');
+        const signOutBtn = document.getElementById('sign-out-btn');
+        const signUpForm = document.getElementById('sign-up-form');
+        const signInForm = document.getElementById('sign-in-form');
+        const educationField = document.getElementById('education-field');
+        const educationSubmit = document.getElementById('education-submit');
+        const careerOptionsContainer = document.getElementById('career-options');
+        const currentCareerGoal = document.getElementById('current-career-goal');
+        const calendarView = document.getElementById('calendar-view');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        const showCompletedToggle = document.getElementById('show-completed');
+        const yearOptions = document.querySelectorAll('.year-option');
+        const remainingTime = document.getElementById('remaining-time');
+
+        // State variables
+        let currentUser = null;
+        let selectedYear = null;
+        let showCompleted = true;
+
+        // Navigation functions
+        function showPage(page) {
+            // Hide all pages
+            Object.values(pages).forEach(p => p.classList.remove('active'));
+            
+            // Show the requested page
+            page.classList.add('active');
+        }
+
+        // Check if user is authenticated
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (user) {
+                currentUser = user;
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = user.name;
+                
+                if (user.education && user.careerGoal) {
+                    showPage(pages.dashboard);
+                    loadDashboard();
+                } else if (user.education) {
+                    showPage(pages.careerGoals);
+                    loadCareerOptions(user.education);
+                } else {
+                    showPage(pages.education);
+                }
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+                showPage(pages.signIn);
+            }
+        }
+
+        // Authentication functions
+        function signUp(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            // Check if user already exists
+            if (localStorage.getItem(email)) {
+                showNotification('User with this email already exists', 'error');
+                return;
+            }
+            
+            // Create user object
+            const user = {
+                name,
+                email,
+                password
+            };
+            
+            // Store user data
+            localStorage.setItem(email, JSON.stringify(user));
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Show education selection page
+            showPage(pages.education);
+            checkAuth();
+            
+            showNotification('Account created successfully!');
+        }
+
+        function signIn(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+            
+            // Get user data
+            const userData = localStorage.getItem(email);
+            
+            if (!userData) {
+                showNotification('User not found', 'error');
+                return;
+            }
+            
+            const user = JSON.parse(userData);
+            
+            if (user.password !== password) {
+                showNotification('Incorrect password', 'error');
+                return;
+            }
+            
+            // Set current user
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            // Redirect based on user progress
+            checkAuth();
+            
+            showNotification('Welcome back!');
+        }
+
+        function signOut() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            checkAuth();
+            
+            showNotification('Signed out successfully');
+        }
+
+        // Education and career selection
+        function submitEducation() {
+            const education = educationField.value;
+            
+            if (!education) {
+                showNotification('Please select your field of study', 'error');
+                return;
+            }
+            
+            if (!selectedYear) {
+                showNotification('Please select your current year', 'error');
+                return;
+            }
+            
+            // Update user data
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            user.education = education;
+            user.currentYear = selectedYear;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem(user.email, JSON.stringify(user));
+            
+            // Show career options
+            showPage(pages.careerGoals);
+            loadCareerOptions(education);
+        }
+
+        function loadCareerOptions(education) {
+            const options = careerOptions[education] || [];
+            
+            careerOptionsContainer.innerHTML = '';
+            
+            options.forEach(option => {
+                const icon = option === "Software Developer" ? "laptop-code" :
+                            option === "Data Scientist" ? "chart-line" :
+                            option === "UX Designer" ? "pencil-ruler" :
+                            option === "Doctor" ? "user-md" :
+                            "briefcase";
+                
+                const optionElement = document.createElement('div');
+                optionElement.className = 'career-option';
+                optionElement.innerHTML = `
+                    <i class="fas fa-${icon}"></i>
+                    <h3>${option}</h3>
+                    <p>Click to select this career path</p>
+                `;
+                
+                optionElement.addEventListener('click', () => selectCareerGoal(option));
+                careerOptionsContainer.appendChild(optionElement);
+            });
+        }
+
+        function selectCareerGoal(goal) {
+            // Update user data
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            user.careerGoal = goal;
+            
+            // Calculate roadmap based on remaining years
+            const remainingYears = 4 - parseInt(user.currentYear);
+            const roadmapDuration = remainingYears * 120; // 4 months per year for learning
+            
+            user.roadmapDuration = roadmapDuration;
+            
+            // Initialize roadmap if it doesn't exist
+            if (!user.roadmap) {
+                // Get the base roadmap for this career
+                const baseRoadmap = careerRoadmaps[goal] || { duration: 120, tasks: [] };
+                
+                // Scale the roadmap based on remaining years
+                const scaleFactor = roadmapDuration / baseRoadmap.duration;
+                
+                user.roadmap = baseRoadmap.tasks.map(task => {
+                    return {
+                        ...task,
+                        day: Math.round(task.day * scaleFactor)
+                    };
+                });
+                
+                // Add additional placeholder tasks if needed
+                if (user.roadmap.length < roadmapDuration / 10) {
+                    for (let i = user.roadmap.length; i < roadmapDuration / 10; i++) {
+                        user.roadmap.push({
+                            day: Math.round((i + 1) * 10 * scaleFactor),
+                            task: `Advanced topic in ${goal}`,
+                            link: "#",
+                            category: "Advanced",
+                            difficulty: "Advanced"
+                        });
+                    }
+                }
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem(user.email, JSON.stringify(user));
+            
+            // Show dashboard
+            showPage(pages.dashboard);
+            loadDashboard();
+            
+            showNotification(`Career goal set to: ${goal}`);
+        }
+
+        // Dashboard functions
+        function loadDashboard() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!user) return;
+            
+            // Set current career goal
+            currentCareerGoal.textContent = `Career Goal: ${user.careerGoal}`;
+            remainingTime.textContent = `Roadmap duration: ${user.roadmapDuration} days (${Math.round(user.roadmapDuration/30)} months)`;
+            
+            // Generate calendar
+            generateCalendar(user.roadmap || []);
+            
+            // Calculate and display progress
+            updateProgress(user.roadmap || []);
+        }
+
+        function generateCalendar(roadmap) {
+            calendarView.innerHTML = '';
+            
+            // Group tasks by day
+            const tasksByDay = {};
+            roadmap.forEach(task => {
+                if (!tasksByDay[task.day]) {
+                    tasksByDay[task.day] = [];
+                }
+                tasksByDay[task.day].push(task);
+            });
+            
+            // Get unique days and sort them
+            const days = Object.keys(tasksByDay).map(Number).sort((a, b) => a - b);
+            
+            days.forEach(day => {
+                const dayTasks = tasksByDay[day];
+                const completedCount = dayTasks.filter(task => task.completed).length;
+                const allCompleted = completedCount === dayTasks.length;
+                
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.innerHTML = `
+                    <div class="day-header">
+                        <div class="day-number">Day ${day}</div>
+                        <div>${completedCount}/${dayTasks.length} tasks</div>
+                    </div>
+                `;
+                
+                dayTasks.forEach(task => {
+                    if (!showCompleted && task.completed) return;
+                    
+                    const taskElement = document.createElement('div');
+                    taskElement.className = `task-item ${task.completed ? 'task-completed' : ''}`;
+                    taskElement.innerHTML = `
+                        <div><strong>${task.task}</strong></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                            <span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                                ${task.category}
+                            </span>
+                            <span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                                ${task.difficulty}
+                            </span>
+                        </div>
+                        <a href="${task.link}" target="_blank" class="task-link">
+                            <i class="fas fa-external-link-alt"></i> Learn more
+                        </a>
+                    `;
+                    
+                    // Add checkbox for task completion
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = task.completed || false;
+                    checkbox.style.marginTop = '10px';
+                    checkbox.addEventListener('change', (e) => toggleTaskCompletion(day, task.task, e.target.checked));
+                    
+                    taskElement.appendChild(checkbox);
+                    taskElement.appendChild(document.createTextNode(' Mark as completed'));
+                    
+                    dayElement.appendChild(taskElement);
+                });
+                
+                calendarView.appendChild(dayElement);
+            });
+        }
+
+        function toggleTaskCompletion(day, taskText, completed) {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!user.roadmap) {
+                user.roadmap = [];
+            }
+            
+            // Find the task
+            const taskIndex = user.roadmap.findIndex(t => t.day === day && t.task === taskText);
+            
+            if (taskIndex !== -1) {
+                // Update completion status
+                user.roadmap[taskIndex].completed = completed;
+                
+                // Save updated user data
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem(user.email, JSON.stringify(user));
+                
+                // Update progress
+                updateProgress(user.roadmap);
+                
+                // Regenerate calendar if filter is active
+                if (!showCompleted) {
+                    generateCalendar(user.roadmap);
+                }
+            }
+        }
+
+        function updateProgress(roadmap) {
+            const completedTasks = roadmap.filter(task => task.completed).length;
+            const totalTasks = roadmap.length;
+            const percentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+            
+            progressFill.style.width = `${percentage}%`;
+            progressPercentage.textContent = `${percentage}% completed`;
+        }
+
+        function showNotification(message, type = 'success') {
+            notificationMessage.textContent = message;
+            
+            if (type === 'error') {
+                notification.querySelector('i').className = 'fas fa-exclamation-circle';
+                notification.querySelector('i').style.color = 'var(--danger)';
+            } else {
+                notification.querySelector('i').className = 'fas fa-check-circle';
+                notification.querySelector('i').style.color = 'var(--success)';
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Event Listeners
+        document.getElementById('sign-up-btn').addEventListener('click', () => showPage(pages.signUp));
+        document.getElementById('sign-in-btn').addEventListener('click', () => showPage(pages.signIn));
+        document.getElementById('go-to-signin').addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage(pages.signIn);
+        });
+        document.getElementById('go-to-signup').addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage(pages.signUp);
+        });
+        signUpForm.addEventListener('submit', signUp);
+        signInForm.addEventListener('submit', signIn);
+        signOutBtn.addEventListener('click', signOut);
+        educationSubmit.addEventListener('click', submitEducation);
+        
+        // Year selection
+        yearOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                yearOptions.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedYear = option.getAttribute('data-year');
+            });
+        });
+        
+        // Toggle show completed tasks
+        showCompletedToggle.addEventListener('change', (e) => {
+            showCompleted = e.target.checked;
+            loadDashboard();
+        });
+
+        // Initialize the app
+        checkAuth();
+    </script>
+</body>
+</html>
